@@ -41,4 +41,13 @@ target_link_libraries( # Specifies the target library.
 
                        # Links the target library to the log library
                        # included in the NDK.
-                       ${log-lib} )
+                       ${log-lib}
+                       oboe)
+
+set (OBOE_DIR ../oboe)
+
+# Add the Oboe library as a subdirectory in your project.
+add_subdirectory (${OBOE_DIR} ./oboe)
+
+# Specify the path to the Oboe header files.
+include_directories (${OBOE_DIR}/include)
