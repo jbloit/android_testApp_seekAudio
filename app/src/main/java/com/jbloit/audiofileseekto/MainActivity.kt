@@ -29,6 +29,15 @@ class MainActivity : AppCompatActivity() {
         button_0.setOnClickListener{
             AudioManager.loadAudio_Solo(Uri.fromFile(wavFile).path.toString())
         }
+
+        button_1.setOnClickListener{
+
+            AudioManager.play(true)
+        }
+        button_2.setOnClickListener{
+            AudioManager.play(false)
+        }
+
     }
 
     /**

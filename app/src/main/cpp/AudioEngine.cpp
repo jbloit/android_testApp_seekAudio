@@ -104,7 +104,7 @@ void AudioEngine::createPlaybackStream() {
 
     oboe::Result result = builder.openStream(&mPlayStream);
 
-    if (result == oboe::Result::OK && mPlayStream != nullptr) {
+e    if (result == oboe::Result::OK && mPlayStream != nullptr) {
 
         mSampleRate = mPlayStream->getSampleRate();
         mFramesPerBurst = mPlayStream->getFramesPerBurst();
@@ -213,7 +213,7 @@ void AudioEngine::play(bool onoffon) {
 
         switch (playStatus) {
             case stopped:
-                playStatus = armed;
+                playStatus = playing;
                 break;
             case paused:
                 playStatus = armed;
