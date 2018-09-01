@@ -69,7 +69,6 @@ oboe::DataCallbackResult AudioEngine::onAudioReady(oboe::AudioStream *audioStrea
                                          playStatus,
                                          volumeSimple);
 
-
     }
     return oboe::DataCallbackResult::Continue;
 }
