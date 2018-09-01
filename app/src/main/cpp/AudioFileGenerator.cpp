@@ -46,13 +46,12 @@ void AudioFileGenerator::render(float *buffer,
         if (status == playing) {
 
             if (variationOffset != currentVariationOffset){
-                audiofileGen.addTime(variationOffset - currentVariationOffset);
-                currentVariationOffset = variationOffset;
+//                audiofileGen.addTime(variationOffset - currentVariationOffset);
+//                currentVariationOffset = variationOffset;
             }
 
             sample += audiofileGen.tick(); // * envelope.tick();
             currentSamplePosition++; // rate is always 1 in this app.
-
         }
 
         if (status == paused) {

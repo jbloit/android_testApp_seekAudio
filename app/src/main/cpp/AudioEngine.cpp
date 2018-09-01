@@ -66,8 +66,9 @@ oboe::DataCallbackResult AudioEngine::onAudioReady(oboe::AudioStream *audioStrea
                                          playStatus,
                                          volumeSimple);
 
-        return oboe::DataCallbackResult::Continue;
+
     }
+    return oboe::DataCallbackResult::Continue;
 }
 
 
@@ -104,7 +105,7 @@ void AudioEngine::createPlaybackStream() {
 
     oboe::Result result = builder.openStream(&mPlayStream);
 
-e    if (result == oboe::Result::OK && mPlayStream != nullptr) {
+    if (result == oboe::Result::OK && mPlayStream != nullptr) {
 
         mSampleRate = mPlayStream->getSampleRate();
         mFramesPerBurst = mPlayStream->getFramesPerBurst();
