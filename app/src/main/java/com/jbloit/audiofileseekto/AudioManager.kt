@@ -26,6 +26,9 @@ object AudioManager {
         if (mEngineHandle != 0L) nativeSetVariation(mEngineHandle, variation, slotIndex, partIndex)
     }
 
+    fun seekTo(cueTimeInSeconds: Float){
+        if (mEngineHandle != 0L) nativeSeekTo(mEngineHandle, cueTimeInSeconds)
+    }
 
     private var mEngineHandle: Long = 0
 
@@ -35,4 +38,5 @@ object AudioManager {
     private external fun nativeLoadAudioSolo(engineHandle: Long, filePath_odd: String)
     private external fun nativePlay(engineHandle: Long, onoffon: Boolean)
     private external fun nativeSetVariation(engineHandle: Long,  variation: Int, slotIndex: Int, partIndex: Int)
+    private external fun nativeSeekTo(engineHandle: Long, cueTimeInSeconds: Float)
 }

@@ -56,7 +56,10 @@ oboe::DataCallbackResult AudioEngine::onAudioReady(oboe::AudioStream *audioStrea
 
         int32_t variationOffset = 0;
 
-        variationOffset = sequence[0] * samplesInLoop;
+        variationOffset = sequence[0] * mSampleRate;
+        if (variationOffset > 0){
+            LOGE("VARIATION OFFSET");
+        }
 
         mAudioFileplayersArray[0].render(static_cast<float *>(audioData),
                                          variationOffset,
@@ -85,6 +88,7 @@ AudioEngine::AudioEngine(){
     playStatus = stopped;
     mChannelCount = kDefaultChannelCount;
     createPlaybackStream();
+    sequence[0] = 0;
 
 }
 
@@ -243,4 +247,12 @@ void AudioEngine::setVariation(int variation, int slotIndex, int partIndex) {
 
 void AudioEngine::setSequenceSize(int size) {
     sequenceSize = size;
+}
+
+void AudioEngine::seekTo(float cueTimeInSeconds){
+
+
+    sequence[0] = (int) floor(cueTimeInSeconds);
+    LOGD("SET SEQUENCE[0] TO %d", sequence[0]);
+
 }

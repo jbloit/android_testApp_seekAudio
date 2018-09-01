@@ -33,6 +33,7 @@ public:
     void pause();
     void setVariation(int variation, int slotIndex, int partIndex);
     void setSequenceSize(int size);
+    void seekTo(float cueTimeInSeconds);
 
 
 private:

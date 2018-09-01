@@ -37,6 +37,26 @@ class MainActivity : AppCompatActivity() {
         button_2.setOnClickListener{
             AudioManager.play(false)
         }
+        button_3.setOnClickListener{
+
+            AudioManager.seekTo(10.toFloat())
+        }
+        button_4.setOnClickListener{
+
+            AudioManager.seekTo(2.toFloat())
+        }
+        button_5.setOnClickListener{
+
+            AudioManager.seekTo(-2.toFloat())
+        }
+        button_6.setOnClickListener{
+
+            AudioManager.seekTo(-10.toFloat())
+        }
+        button_7.setOnClickListener{
+
+            AudioManager.seekTo(120.toFloat())
+        }
 
     }
 

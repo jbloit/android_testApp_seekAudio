@@ -101,4 +101,20 @@ Java_com_jbloit_audiofileseekto_AudioManager_nativeSetSequenceSize(
     }
     engine->setSequenceSize(size);
 }
+
+JNIEXPORT void JNICALL
+Java_com_jbloit_audiofileseekto_AudioManager_nativeSeekTo(
+        JNIEnv *env,
+        jclass,
+        jlong engineHandle,
+        jfloat cueTimeInSeconds) {
+
+    AudioEngine *engine = (AudioEngine *) engineHandle;
+    if (engine == nullptr) {
+        LOGE("Engine handle is invalid, call createHandle() to create a new one");
+        return;
+    }
+    engine->seekTo(cueTimeInSeconds);
+}
+
 }
