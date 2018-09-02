@@ -20,7 +20,7 @@ void AudioFileGenerator::setup(int32_t frameRate, float amplitude) {
     currentTargetVolume = 0;
     previousTargetVolume = 0;
     previousStatus = stopped;
-    currentSamplePosition = 0;
+
 }
 
 void AudioFileGenerator::setup(string audioFilePath, int32_t frameRate, float amplitude) {
@@ -36,6 +36,8 @@ void AudioFileGenerator::setup(string audioFilePath, int32_t frameRate, float am
 void AudioFileGenerator::render(float *buffer,
                                 int32_t variationOffset,
                                 int32_t samplesInLoop,
+                                bool newBeatInBuffer,
+                                int32_t frameIndexForBeat,
                                 int32_t channelStride,
                                 int32_t numFrames,
                                 PlayStatus &status,
@@ -43,19 +45,23 @@ void AudioFileGenerator::render(float *buffer,
     for (int i = 0, sampleIndex = 0; i < numFrames; i++) {
         float sample = 0;
 
-        if (status == playing) {
-
-            if (variationOffset != currentVariationOffset){
+        if (status == armed) {
+            if (newBeatInBuffer && i==frameIndexForBeat) {
                 audiofileGen.reset();
-                currentSamplePosition = 0;
+                status = playing;
+            }
+        }
 
-                audiofileGen.addTime(variationOffset);
+        if (status == playing){
+            if (variationOffset != currentVariationOffset && newBeatInBuffer && i==frameIndexForBeat){
+                audiofileGen.reset();
+
+                audiofileGen.addTime(variationOffset * audiofileGen.getFileRate());
                 currentVariationOffset = variationOffset;
             }
-
             sample += audiofileGen.tick(); // * envelope.tick();
-            currentSamplePosition++; // rate is always 1 in this app.
         }
+
 
         if (status == paused) {
             sample = 0;
@@ -63,7 +69,6 @@ void AudioFileGenerator::render(float *buffer,
 
         if (status == stopped) {
             audiofileGen.reset();
-            currentSamplePosition = 0;
         }
 
         // fill buffer at index with sample, on all (usually just 2) audio channels
@@ -72,14 +77,4 @@ void AudioFileGenerator::render(float *buffer,
         }
         sampleIndex += channelStride;
     }
-}
-
-
-
-double AudioFileGenerator::getCurrentTimeSamples() {
-    return currentSamplePosition;
-}
-
-float AudioFileGenerator::getCurrentRelativeTime() {
-    return (double) currentSamplePosition / durationInSamples;
 }

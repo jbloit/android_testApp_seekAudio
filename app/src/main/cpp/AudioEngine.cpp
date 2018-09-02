@@ -60,7 +60,7 @@ oboe::DataCallbackResult AudioEngine::onAudioReady(oboe::AudioStream *audioStrea
 
         int32_t variationOffset = 0;
 
-        variationOffset = sequence[0] * mSampleRate;
+        variationOffset = sequence[0]; // in seconds
         if (variationOffset > 0){
             LOGE("VARIATION OFFSET");
         }
@@ -68,30 +68,32 @@ oboe::DataCallbackResult AudioEngine::onAudioReady(oboe::AudioStream *audioStrea
         mAudioFileplayersArray[0].render(static_cast<float *>(audioData),
                                          variationOffset,
                                          samplesInLoop,
+                                         newBeatInBuffer,
+                                         frameIndexForBeat,
                                          channelCount,
                                          numFrames,
                                          playStatus,
                                          volumeSimple);
-
     }
     return oboe::DataCallbackResult::Continue;
 }
-
 
 void AudioEngine::renderMetronomeClick(float *buffer,
                                  int32_t channelStride,
                                  int32_t numFrames) {
 
+    newBeatInBuffer = false;
     for (int i = 0; i < numFrames; i++) {
         beatPhaseInSamples += 1;
 
-        // New beat
+        // New beat: render click
         if (beatPhaseInSamples > beatDurationInSamples) {
-            // render a click for round trip latency detection
             for (int j = 0; j < channelStride; j++) {
                 buffer[i * channelStride + j] += 1.0;
             }
             beatPhaseInSamples = 0;
+            frameIndexForBeat = i;
+            newBeatInBuffer = true;
         }
     }
 }
@@ -240,7 +242,7 @@ void AudioEngine::play(bool onoffon) {
 
         switch (playStatus) {
             case stopped:
-                playStatus = playing;
+                playStatus = armed;
                 break;
             case paused:
                 playStatus = armed;

@@ -30,8 +30,10 @@ public:
      * NB: status is a reference, thus it updates the calling param variable.
      * */
     void render(float *buffer,                                          // buffer to fill
-                int32_t variationOffset,                                // variation offset in samples
+                int32_t variationOffset,                                // variation offset in seconds
                 int32_t samplesInLoop,                                  // loop duration in samples
+                bool newBeatInBuffer,
+                int32_t frameIndexForBeat,
                 int32_t channelStride,                                  // number of channels to write to (usually stereo)
                 int32_t numFrames,                                      // number of frames in buffer
                 PlayStatus& status,                                     // play status
@@ -48,7 +50,6 @@ private:
     float currentTargetVolume;
     float previousTargetVolume;
     PlayStatus previousStatus;
-    double currentSamplePosition;
     unsigned long durationInSamples = 0;
     int32_t currentVariationOffset = 0;
 

@@ -77,6 +77,8 @@ private:
     float bpm;
     int32_t beatDurationInSamples = 48000;
     int32_t beatPhaseInSamples = 0;
+    int32_t frameIndexForBeat = 0;
+    bool newBeatInBuffer = false;
 
 };
 
