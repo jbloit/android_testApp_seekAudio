@@ -43,6 +43,10 @@ oboe::DataCallbackResult AudioEngine::onAudioReady(oboe::AudioStream *audioStrea
         memset(static_cast<float *>(audioData), 0,
                sizeof(float) * channelCount * numFrames);
 
+
+        renderMetronomeClick(static_cast<float *>(audioData), channelCount, numFrames);
+
+
         // COUNTDOWN.WAV VALUES
         const double beatDuration = 1.0;
         sequenceSize = 16;
@@ -74,6 +78,24 @@ oboe::DataCallbackResult AudioEngine::onAudioReady(oboe::AudioStream *audioStrea
 }
 
 
+void AudioEngine::renderMetronomeClick(float *buffer,
+                                 int32_t channelStride,
+                                 int32_t numFrames) {
+
+    for (int i = 0; i < numFrames; i++) {
+        beatPhaseInSamples += 1;
+
+        // New beat
+        if (beatPhaseInSamples > beatDurationInSamples) {
+            // render a click for round trip latency detection
+            for (int j = 0; j < channelStride; j++) {
+                buffer[i * channelStride + j] += 1.0;
+            }
+            beatPhaseInSamples = 0;
+        }
+    }
+}
+
 // ==================================================================================
 //                                  LIFECYCLE
 // ==================================================================================
@@ -88,6 +110,7 @@ AudioEngine::AudioEngine(){
     mChannelCount = kDefaultChannelCount;
     createPlaybackStream();
     sequence[0] = 0;
+    setBpm(60);
 
 }
 
@@ -254,4 +277,10 @@ void AudioEngine::seekTo(float cueTimeInSeconds){
     sequence[0] = (int) floor(cueTimeInSeconds);
     LOGD("SET SEQUENCE[0] TO %d", sequence[0]);
 
+}
+
+void AudioEngine::setBpm(float bpm_){
+    bpm = bpm_;
+    beatDurationInSamples = 60/bpm * mSampleRate;
+    beatPhaseInSamples = 0;
 }

@@ -34,6 +34,7 @@ public:
     void setVariation(int variation, int slotIndex, int partIndex);
     void setSequenceSize(int size);
     void seekTo(float cueTimeInSeconds);
+    void setBpm(float bpm_);
 
 
 private:
@@ -61,6 +62,10 @@ private:
     // The AudioFileGenerators generate audio data
     std::array<AudioFileGenerator, NUMFILES> mAudioFileplayersArray;
 
+    void renderMetronomeClick(float *buffer,
+                         int32_t channelStride,
+                         int32_t numFrames);
+
     PlayStatus playStatus;
     float volumeSimple = 0;
     int8_t sequence[MAXSEQUENCESIZE];
@@ -69,7 +74,9 @@ private:
     int8_t barIndex = 0;
     double beatDuration = 1; // in seconds
     int32_t samplesInBar;
-
+    float bpm;
+    int32_t beatDurationInSamples = 48000;
+    int32_t beatPhaseInSamples = 0;
 
 };
 
